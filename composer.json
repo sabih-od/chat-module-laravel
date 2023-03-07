@@ -28,6 +28,8 @@
   "require": {
     "staudenmeir/eloquent-json-relations": "^1.1",
     "spatie/laravel-medialibrary": "^9.0.0",
-    "beyondcode/laravel-websockets": "^2.0@beta"
+    "beyondcode/laravel-websockets": "^2.0@beta",
+    "doctrine/dbal": "3.7.x-dev",
+    "pusher/pusher-php-server": "~3.0"
   }
 }

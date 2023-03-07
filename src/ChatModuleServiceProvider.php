@@ -19,6 +19,7 @@ class ChatModuleServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('chatmodule.php'),
                 __DIR__ . '/../config/media-library.php' => config_path('media-library.php'),
+                __DIR__ . '/../config/websockets.php' => config_path('websockets.php'),
             ], 'config');
 
             $this->publishes([
@@ -38,6 +39,13 @@ class ChatModuleServiceProvider extends ServiceProvider
             if (!$this->migrationExists('_create_user_deletes_table.php')) {
                 $migrations[__DIR__ . '/../database/migrations/create_user_deletes_table.php.stub'] = database_path('migrations/' . date('Y_m_d_His', time()) . '_create_user_deletes_table.php');
             }
+            if (!$this->migrationExists('_create_websockets_statistics_entries_table.php')) {
+                $migrations[__DIR__ . '/../database/migrations/create_websockets_statistics_entries_table.php.stub'] = database_path('migrations/' . date('Y_m_d_His', time()) . '_create_websockets_statistics_entries_table.php');
+            }
+            if (!$this->migrationExists('_rename_statistics_counters.php')) {
+                $migrations[__DIR__ . '/../database/migrations/rename_statistics_counters.php.stub'] = database_path('migrations/' . date('Y_m_d_His', time()) . '_rename_statistics_counters.php');
+            }
+
             $this->publishes($migrations, 'migrations');
 
         }

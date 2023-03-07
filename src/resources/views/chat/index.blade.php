@@ -207,8 +207,10 @@
         $(function () {
 
             let is_chat_next_url = null
+            let socket = null
             let messages = []
             const auth_id = '{{ \Auth::id() }}'
+
 
             const $post = (url, params) => {
                 const _token = '{{ csrf_token() }}'
@@ -241,6 +243,33 @@
                     })
                 })
             }
+
+            const messageRender = () => {
+                $('#chat-messages').html("")
+                let _html = ''
+                for (let message of messages) {
+                    const time = moment(message.created_at).fromNow()
+                    if (auth_id == message.sender_id) {
+                        _html += `<li class="repaly">
+                                    <p>${message.content}</p>
+                                    <span class="time">${time}</span>
+                                </li>`
+                    } else {
+                        _html += `<li class="sender">
+                                    <p>${message.content}</p>
+                                    <span class="time">${time}</span>
+                                </li>`
+                    }
+                }
+                $('#chat-messages').html(_html)
+                $('#chat-box-container .modal-body').scrollTop($('#chat-box-container .modal-body .msg-body')[0]?.scrollHeight ?? 0)
+            }
+
+            const connectSocket = () => {
+
+            }
+
+            connectSocket()
 
             $(document).on('submit', '#chat-message-form', function (e) {
                 e.preventDefault()
@@ -287,26 +316,7 @@
                 })
             })
 
-            const messageRender = () => {
-                $('#chat-messages').html("")
-                let _html = ''
-                for (let message of messages) {
-                    const time = moment(message.created_at).fromNow()
-                    if (auth_id == message.sender_id) {
-                        _html += `<li class="repaly">
-                                    <p>${message.content}</p>
-                                    <span class="time">${time}</span>
-                                </li>`
-                    } else {
-                        _html += `<li class="sender">
-                                    <p>${message.content}</p>
-                                    <span class="time">${time}</span>
-                                </li>`
-                    }
-                }
-                $('#chat-messages').html(_html)
-                $('#chat-box-container .modal-body').scrollTop($('#chat-box-container .modal-body .msg-body')[0]?.scrollHeight ?? 0)
-            }
+
         })
     </script>
 @endpush
