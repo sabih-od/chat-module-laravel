@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * Class CreateChatMessagesTable.
+ */
+class CreateChatMessagesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('chat_messages', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('channel_id')->references('id')->on(config('chatmodule.channels_table'))->onDelete('cascade');
+            $table->foreignId('sender_id')->references('id')->on(config('chatmodule.users_table'))->onDelete('cascade');
+            $table->text("content")->nullable(true);
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('chat_messages');
+    }
+}
