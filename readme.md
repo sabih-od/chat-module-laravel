@@ -18,3 +18,19 @@
 `PUSHER_APP_SECRET=f15db97569e8`
 
 `PUSHER_APP_CLUSTER=mt1`
+
+### 3. Uncomment Line
+
+`App\Providers\BroadcastServiceProvider::class,` in `config/app.php`
+
+### 4. Set Queue table
+
+`php artisan queue:table`
+
+`php artisan migrate`
+
+set `QUEUE_CONNECTION=database` in `.env` file.
+
+### 5. Run Queue worker
+
+`php artisan queue:work --queue=high,default`

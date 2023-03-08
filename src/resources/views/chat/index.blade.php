@@ -203,11 +203,30 @@
             integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://js.pusher.com/8.0.1/pusher.min.js"></script>
+
+    <script type="module">
+        import Echo from 'https://cdn.jsdelivr.net/npm/laravel-echo@^1.11/dist/echo.min.js'
+
+        window.Pusher = Pusher;
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            authEndpoint: "{{url('/broadcasting/auth')}}",
+            key: '{{ env('PUSHER_APP_KEY') }}',
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            wsHost: window.location.hostname,
+            wsPort: 3001,
+            forceTLS: false,
+            disableStats: true,
+        });
+    </script>
+
     <script>
         $(function () {
-
             let is_chat_next_url = null
-            let socket = null
+            let active_channel_id = null
+            let active_channel = null
             let messages = []
             const auth_id = '{{ \Auth::id() }}'
 
@@ -265,11 +284,16 @@
                 $('#chat-box-container .modal-body').scrollTop($('#chat-box-container .modal-body .msg-body')[0]?.scrollHeight ?? 0)
             }
 
-            const connectSocket = () => {
-
+            const connectChannel = (channel_id) => {
+                if (active_channel_id) {
+                    window.Echo.leave(`Chat.Channel.${active_channel_id}`)
+                }
+                active_channel_id = channel_id
+                active_channel = window.Echo.private(`Chat.Channel.${channel_id}`)
+                    .listen('.chat.message', (e) => {
+                        console.log("socket data", e);
+                    });
             }
-
-            connectSocket()
 
             $(document).on('submit', '#chat-message-form', function (e) {
                 e.preventDefault()
@@ -312,7 +336,8 @@
                         messages = res.data.reverse()
                         messageRender()
                     })
-                    console.log("res", res.data)
+                    connectChannel(res.data.id)
+                    // console.log("res", res.data)
                 })
             })
 

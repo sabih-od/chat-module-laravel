@@ -3,6 +3,7 @@
 namespace ChatModule\Http\Controllers;
 
 
+use ChatModule\Events\NewMessage;
 use ChatModule\Models\Channel;
 use ChatModule\Models\User;
 use ChatModule\Rules\isValidMedia;
@@ -116,7 +117,7 @@ class ChatController extends Controller
 //            $channel->last_message_at = $message->created_at;
             $channel->save();
 
-//            event(new NewMessage($channel->id, $message));
+            event(new NewMessage($channel->id, $message));
 
 //            $participants = collect($channel->participants)->filter(function ($item) {
 //                return $item != Auth::id();
