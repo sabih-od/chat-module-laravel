@@ -31,6 +31,8 @@
 
 set `QUEUE_CONNECTION=database` in `.env` file.
 
-### 5. Run Queue worker
+### 5. Run Commands
 
 `php artisan queue:work --queue=high,default`
+
+`php artisan websockets:serve --port=3001`

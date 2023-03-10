@@ -422,14 +422,11 @@ li.repaly .time {
     position: relative;
     width: 145px;
     height: auto;
-    text-align: left;
-    margin: 0 auto;
     display: block;
     background: #F6F7FA;
     border-radius: 3px;
     padding: 5px 15px;
-    float: left;
-    margin-right: 5px;
+    margin-left: 0;
     margin-bottom: 5px;
     overflow: hidden;
 }

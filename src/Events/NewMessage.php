@@ -16,7 +16,7 @@ class NewMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $channel_id, $sender_id;
+    protected $channel_id;
     public $data;
 
     /**
@@ -27,7 +27,7 @@ class NewMessage implements ShouldBroadcast
     public function __construct($channel_id, ChatMessage $message)
     {
         $this->channel_id = $channel_id;
-        $this->sender_id = $message->sender->id;
+//        $this->sender_id = $message->sender->id;
         $media = $message->getFirstMedia('media');
         $media = $media ? [
             'mime_type' => $media->mime_type,
@@ -39,11 +39,12 @@ class NewMessage implements ShouldBroadcast
             'content' => $message->content,
             'created_at' => $message->created_at,
             'file' => $media,
-            'sender' => [
+            'sender_id' => $message->sender_id
+                /*[
                 'id' => $message->sender->id,
                 'name' => $message->sender->name,
                 'profile_img' => $message->sender->getFirstMedia('profile_image')->original_url ?? asset('chatmodule/images/profile-image.jpg'),
-            ],
+            ],*/
         ];
     }
 
